@@ -1,0 +1,6 @@
+
+JenkinsのSlackプラグインを利用して
+暗黙的にすべてのジョブに結果の通知をSlackに投稿する機能を付加するプラグイン
+
+Slack Pluginの設定をしてからGlobal Slack Messagesに各結果ごとの文言を入れる
+メッセージはビルド時の環境変数を展開する
