@@ -1,0 +1,4 @@
+<?jelly escape-by-default='true'?>
+<div>
+  This plugin post to slack after any build completed without any job setting. 
+</div>
