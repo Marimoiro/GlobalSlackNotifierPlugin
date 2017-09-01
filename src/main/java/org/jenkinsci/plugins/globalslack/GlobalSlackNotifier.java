@@ -121,7 +121,12 @@ public class GlobalSlackNotifier extends RunListener<Run<?, ?>> implements Descr
         private SlackMessage abortedSlackMessage;
 
         public DescriptorImpl() {
-            load();
+            try{
+                load();
+            }catch(NullPointerException e)
+            {
+                
+            }
         }
         public String getDisplayName() {
             return "Global Slack Messages";
@@ -144,17 +149,22 @@ public class GlobalSlackNotifier extends RunListener<Run<?, ?>> implements Descr
             throw new IllegalArgumentException("result not match");
         }
 
-        @Override
-        public boolean configure(StaplerRequest req, JSONObject formData) throws Descriptor.FormException {
-            
+        public void configure(JSONObject formData){
             successSlackMessage = new SlackMessage(successRoom = formData.getString("successRoom"), successMessage = formData.getString("successMessage"), notifyOnSuccess = formData.getBoolean("notifyOnSuccess"),"good");
             failureSlackMessage = new SlackMessage(failureRoom = formData.getString("failureRoom"), failureMessage = formData.getString("failureMessage"), notifyOnFail = formData.getBoolean("notifyOnFail"),"danger");
             unstableSlackMessage = new SlackMessage(unstableRoom = formData.getString("unstableRoom"), unstableMessage = formData.getString("unstableMessage"), notifyOnUnstable =  formData.getBoolean("notifyOnUnstable"),"warning");
             notBuiltSlackMessage = new SlackMessage(notBuiltRoom = formData.getString("notBuiltRoom"), notBuiltMessage = formData.getString("notBuiltMessage"), notifyOnNotBuilt = formData.getBoolean("notifyOnNotBuilt"),"gray");
             abortedSlackMessage = new SlackMessage(abortedRoom =formData.getString("abortedRoom"), abortedMessage = formData.getString("abortedMessage"), notifyOnAborted = formData.getBoolean("notifyOnAborted"),"warning");
 
-          save();
-          return super.configure(req, formData);
+        }
+
+        @Override
+        public boolean configure(StaplerRequest req, JSONObject formData) throws Descriptor.FormException {
+            
+            configure(formData);
+            
+            save();
+            return super.configure(req, formData);
         }
 
 		/**
