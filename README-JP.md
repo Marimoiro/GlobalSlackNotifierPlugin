@@ -4,7 +4,7 @@
 1. SlackPluginで投稿できる状態にする
 2. GlobalSlack<Messagesの設定をする
 
-# GlobalSlack<Messagesの設定
+# GlobalSlackMessagesの設定
 通知したいステータスに合わせて通知メッセージを作成します。
 
 例えばSUCCESSの時に通知したい場合
