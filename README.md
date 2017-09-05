@@ -11,4 +11,4 @@
 
 * XXX is build result
 
-![image](master/img/globalslackmessage.png)
+![image](img/globalslackmessage.png)
