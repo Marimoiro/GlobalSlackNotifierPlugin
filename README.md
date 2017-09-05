@@ -10,3 +10,5 @@
 3. Set channel notifying, if necessary.(default is Slack Plugin's Channel)
 
 * XXX is build result
+
+![image](master/img/globalslackmessage.png)
