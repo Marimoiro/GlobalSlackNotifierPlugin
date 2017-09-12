@@ -11,6 +11,8 @@
     It's also often useful to just check other similar scripts to see what
     tags they use. Views are always organized according to its owner class,
     so it should be straightforward to find them.
+
+refernce from https://github.com/jenkinsci/chatwork-plugin
   -->
   <f:section title="Global Slack Messages">
 
