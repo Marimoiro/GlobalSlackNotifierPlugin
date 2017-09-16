@@ -44,7 +44,12 @@
         <url>https://repo.jenkins-ci.org/releases</url>
       </repository>
     </distributionManagement>
-
+         
+  <scm>
+    <connection>scm:git:ssh://github.com/jenkinsci/global-slack-notifier-plugin.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/jenkinsci/global-slack-notifier-plugin.git</developerConnection>
+    <url>https://github.com/jenkinsci/global-slack-notifier-plugin</url>
+  </scm>
 
   <!-- If you want this to appear on the wiki page:
   <developers>
