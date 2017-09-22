@@ -50,6 +50,14 @@
     <developerConnection>scm:git:ssh://git@github.com/jenkinsci/global-slack-notifier-plugin.git</developerConnection>
     <url>https://github.com/jenkinsci/global-slack-notifier-plugin</url>
   </scm>
+  
+  <developers>
+    <developer>
+      <id>marimoiro</id>
+      <name>shinsuke nakajima</name>
+      <email>marimoncolor@gmail.com</email>
+    </developer>
+  </developers>
 
   <!-- If you want this to appear on the wiki page:
   <developers>
