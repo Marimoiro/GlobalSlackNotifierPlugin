@@ -45,7 +45,7 @@
          
   <scm>
     <connection>scm:git:https://github.com/jenkinsci/global-slack-notifier-plugin.git</connection>
-    <developerConnection>scm:https://github.com/jenkinsci/global-slack-notifier-plugin.git</developerConnection>
+    <developerConnection>scm:git:https://github.com/jenkinsci/global-slack-notifier-plugin.git</developerConnection>
     <url>https://github.com/jenkinsci/global-slack-notifier-plugin</url>
     <tag>global-slack-notifier-1.1</tag>
   </scm>
