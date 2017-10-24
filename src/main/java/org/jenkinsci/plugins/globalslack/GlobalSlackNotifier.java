@@ -14,9 +14,9 @@ import org.kohsuke.stapler.StaplerRequest;
 import jenkins.plugins.slack.*;
 
 @Extension
-public class GlobalSlackNotifier extends RunListener<Run<?, ?>> implements Describable<GlobalSlackNotifier> {
+public class GlobalSlackNotifier extends RunListener<AbstractBuild<?, ?>> implements Describable<GlobalSlackNotifier> {
     @Override
-    public void onCompleted(Run run, TaskListener listener) {
+    public void onCompleted(AbstractBuild run, TaskListener listener) {
         publish( run, listener);
     }
 
@@ -37,7 +37,7 @@ public class GlobalSlackNotifier extends RunListener<Run<?, ?>> implements Descr
           return getDescriptorImpl().getSlackMessage(result);
       }
 
-      public void publish(Run<?,?> r, TaskListener listener)
+      public void publish(AbstractBuild<?,?> r, TaskListener listener)
       {
           Result result = r.getResult();
           SlackMessage message = getSlackMessage(result);
@@ -54,6 +54,8 @@ public class GlobalSlackNotifier extends RunListener<Run<?, ?>> implements Descr
           boolean botUser = slackDesc.getBotUser();
           
           String authTokenCredentialId = slackDesc.getTokenCredentialId();
+          String sendAs = slackDesc.getSendAs();
+
           
           String room = message.getRoom();
           if (StringUtils.isEmpty(room)) {
@@ -76,8 +78,19 @@ public class GlobalSlackNotifier extends RunListener<Run<?, ?>> implements Descr
           room = env.expand(room);
           
           String postText = env.expand(message.getMessage());
-          if(StringUtils.isEmpty(postText)){ return; }
           
+
+          CommitInfoChoice choice = CommitInfoChoice.forDisplayName("nothing about commits"); //TODO :selectable
+          // imcompletely 
+          SlackNotifier notifier = new SlackNotifier(baseUrl,teamDomain,authToken,botUser,room,authTokenCredentialId,
+            sendAs,false,true,true,
+            true,true,true,true,true,
+            true,false,false,
+            choice,!StringUtils.isEmpty(postText),postText);
+          ActiveNotifier activeNotifier = new  ActiveNotifier(notifier,null);
+          activeNotifier.completed(r);
+          
+          /*
           SlackService service = new StandardSlackService(baseUrl, teamDomain, authToken, authTokenCredentialId, botUser, room);
           boolean postResult = service.publish(postText, message.getColor());
           if(!postResult){
@@ -88,6 +101,7 @@ public class GlobalSlackNotifier extends RunListener<Run<?, ?>> implements Descr
 
               listener.getLogger().println(s.toString());
           }
+          */
         }
 
 
