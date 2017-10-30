@@ -213,7 +213,9 @@ import jenkins.plugins.slack.*;
                     // This status code guarantees that the previous build fails and has been successful before
                     // The back to normal time is the time since the build first broke
                     Run<?,?> previousSuccessfulBuild = build.getPreviousSuccessfulBuild();
+                    if( previousSuccessfulBuild == null ) retunr "";
                     Run<?,?> initialFailureAfterPreviousSuccessfulBuild = previousSuccessfulBuild.getNextBuild();
+                    if( initialFailureAfterPreviousSuccessfulBuild == null ) retunr "";
                     long initialFailureStartTime = initialFailureAfterPreviousSuccessfulBuild.getStartTimeInMillis();
                     long initialFailureDuration = initialFailureAfterPreviousSuccessfulBuild.getDuration();
                     long initialFailureEndTime = initialFailureStartTime + initialFailureDuration;
