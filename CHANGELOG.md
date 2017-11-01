@@ -1,6 +1,6 @@
 # 1.3
 
- * Fikxec . Can't notifier pipeline project
+ * Fikxed . Can't notifier pipeline project
  
 # 1.2
 
