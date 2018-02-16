@@ -10,13 +10,25 @@ import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.kohsuke.stapler.StaplerRequest;
 
+import hudson.scm.ChangeLogSet;
+import hudson.scm.ChangeLogSet.AffectedFile;
+import hudson.scm.ChangeLogSet.Entry;
+
+import java.util.*;
+import java.util.logging.Logger;
 
 import jenkins.plugins.slack.*;
 
+
+
 @Extension
-public class GlobalSlackNotifier extends RunListener<AbstractBuild<?, ?>> implements Describable<GlobalSlackNotifier> {
+public class GlobalSlackNotifier extends RunListener<Run<?, ?>> implements Describable<GlobalSlackNotifier> {
+    
+    private static final Logger logger = Logger.getLogger(GlobalSlackNotifier.class.getName());
+    
+    
     @Override
-    public void onCompleted(AbstractBuild run, TaskListener listener) {
+    public void onCompleted(Run<?, ?> run, TaskListener listener) {
         publish( run, listener);
     }
 
@@ -37,7 +49,7 @@ public class GlobalSlackNotifier extends RunListener<AbstractBuild<?, ?>> implem
           return getDescriptorImpl().getSlackMessage(result);
       }
 
-      public void publish(AbstractBuild<?,?> r, TaskListener listener)
+      public void publish(Run<?, ?> r, TaskListener listener)
       {
           Result result = r.getResult();
           SlackMessage message = getSlackMessage(result);
@@ -87,12 +99,10 @@ public class GlobalSlackNotifier extends RunListener<AbstractBuild<?, ?>> implem
             true,true,true,true,true,
             true,false,false,
             choice,!StringUtils.isEmpty(postText),postText);
-          ActiveNotifier activeNotifier = new  ActiveNotifier(notifier,null);
-          activeNotifier.completed(r);
+          String messageText = getBuildStatusMessage(r,notifier,false,false,true);
           
-          /*
           SlackService service = new StandardSlackService(baseUrl, teamDomain, authToken, authTokenCredentialId, botUser, room);
-          boolean postResult = service.publish(postText, message.getColor());
+          boolean postResult = service.publish(messageText, message.getColor());
           if(!postResult){
               StringBuilder s = new StringBuilder("Global Slack Notifier try posting to slack. However some error occurred\n");
               s.append("TeamDomain :" + teamDomain + "\n");
@@ -101,8 +111,30 @@ public class GlobalSlackNotifier extends RunListener<AbstractBuild<?, ?>> implem
 
               listener.getLogger().println(s.toString());
           }
-          */
+          
         }
+
+        /**
+         * Copy from Slack Plugin's ActiveNotifier.getBuildStatusMessage & I changed AbstractBuild to Run
+         * https://github.com/jenkinsci/slack-plugin/blob/master/src/main/java/jenkins/plugins/slack/ActiveNotifier.java#L256
+         */
+        String getBuildStatusMessage(Run<?,?> r,SlackNotifier notifier, boolean includeTestSummary, boolean includeFailedTests, boolean includeCustomMessage) {
+            MessageBuilder message = new MessageBuilder(notifier, r);
+            message.appendStatusMessage();
+            message.appendDuration();
+            message.appendOpenLink();
+            if (includeTestSummary) {
+                message.appendTestSummary();
+            }
+            if (includeFailedTests) {
+                message.appendFailedTests();
+            }
+            if (includeCustomMessage) {
+                message.appendCustomMessage();
+            }
+            return message.toString();
+        }
+    
 
 
       @Extension
