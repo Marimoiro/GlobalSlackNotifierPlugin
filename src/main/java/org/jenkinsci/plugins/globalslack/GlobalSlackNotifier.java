@@ -63,7 +63,7 @@ public class GlobalSlackNotifier extends RunListener<Run<?, ?>> implements Descr
 
 
           String authToken = slackDesc.getToken();
-          boolean botUser = slackDesc.getBotUser();
+          boolean botUser = slackDesc.isBotUser();
           
           String authTokenCredentialId = slackDesc.getTokenCredentialId();
           String sendAs = slackDesc.getSendAs();
