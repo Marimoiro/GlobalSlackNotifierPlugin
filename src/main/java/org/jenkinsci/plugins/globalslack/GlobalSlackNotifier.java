@@ -23,10 +23,10 @@ import jenkins.plugins.slack.*;
 
 @Extension
 public class GlobalSlackNotifier extends RunListener<Run<?, ?>> implements Describable<GlobalSlackNotifier> {
-    
+
     private static final Logger logger = Logger.getLogger(GlobalSlackNotifier.class.getName());
-    
-    
+
+
     @Override
     public void onCompleted(Run<?, ?> run, TaskListener listener) {
         publish( run, listener);
@@ -36,7 +36,7 @@ public class GlobalSlackNotifier extends RunListener<Run<?, ?>> implements Descr
     public Descriptor<GlobalSlackNotifier> getDescriptor() {
         return getDescriptorImpl();
       }
-    
+
       public DescriptorImpl getDescriptorImpl() {
         return (DescriptorImpl) Jenkins.getInstance().getDescriptorOrDie(GlobalSlackNotifier.class);
       }
@@ -56,7 +56,7 @@ public class GlobalSlackNotifier extends RunListener<Run<?, ?>> implements Descr
           SlackNotifier.DescriptorImpl slackDesc = getSlackDescriptor();
 
           if(!message.getEnable()){ return; }
-          
+
           String teamDomain = slackDesc.getTeamDomain();
 
           String baseUrl = slackDesc.getBaseUrl();
@@ -64,11 +64,11 @@ public class GlobalSlackNotifier extends RunListener<Run<?, ?>> implements Descr
 
           String authToken = slackDesc.getToken();
           boolean botUser = slackDesc.isBotUser();
-          
+
           String authTokenCredentialId = slackDesc.getTokenCredentialId();
           String sendAs = slackDesc.getSendAs();
 
-          
+
           String room = message.getRoom();
           if (StringUtils.isEmpty(room)) {
               room = slackDesc.getRoom();
@@ -82,25 +82,25 @@ public class GlobalSlackNotifier extends RunListener<Run<?, ?>> implements Descr
               listener.getLogger().println("Error retrieving environment vars: " + e.getMessage());
               env = new EnvVars();
           }
-          
+
           baseUrl = env.expand(baseUrl);
           teamDomain = env.expand(teamDomain);
           authToken = env.expand(authToken);
           authTokenCredentialId = env.expand(authTokenCredentialId);
           room = env.expand(room);
-          
+
           String postText = env.expand(message.getMessage());
-          
+
 
           CommitInfoChoice choice = CommitInfoChoice.forDisplayName("nothing about commits"); //TODO :selectable
-          // imcompletely 
+          // imcompletely
           SlackNotifier notifier = new SlackNotifier(baseUrl,teamDomain,authToken,botUser,room,authTokenCredentialId,
             sendAs,false,true,true,
             true,true,true,true,true,
             true,false,false,
-            choice,!StringUtils.isEmpty(postText),postText);
+            choice,!StringUtils.isEmpty(postText),postText, null, null, null, null, null);
           String messageText = getBuildStatusMessage(r,notifier,false,false,true);
-          
+
           SlackService service = new StandardSlackService(baseUrl, teamDomain, authToken, authTokenCredentialId, botUser, room);
           boolean postResult = service.publish(messageText, message.getColor());
           if(!postResult){
@@ -111,7 +111,7 @@ public class GlobalSlackNotifier extends RunListener<Run<?, ?>> implements Descr
 
               listener.getLogger().println(s.toString());
           }
-          
+
         }
 
         /**
@@ -134,7 +134,7 @@ public class GlobalSlackNotifier extends RunListener<Run<?, ?>> implements Descr
             }
             return message.toString();
         }
-    
+
 
 
       @Extension
@@ -171,7 +171,7 @@ public class GlobalSlackNotifier extends RunListener<Run<?, ?>> implements Descr
                 load();
             }catch(NullPointerException e)
             {
-                
+
             }
         }
         public String getDisplayName() {
@@ -179,7 +179,7 @@ public class GlobalSlackNotifier extends RunListener<Run<?, ?>> implements Descr
         }
 
         public SlackMessage getSlackMessage(Result result){
-            
+
             if(result == Result.SUCCESS)
             {
                 return successSlackMessage;
@@ -206,9 +206,9 @@ public class GlobalSlackNotifier extends RunListener<Run<?, ?>> implements Descr
 
         @Override
         public boolean configure(StaplerRequest req, JSONObject formData) throws Descriptor.FormException {
-            
+
             configure(formData);
-            
+
             save();
             return super.configure(req, formData);
         }
@@ -309,7 +309,7 @@ public class GlobalSlackNotifier extends RunListener<Run<?, ?>> implements Descr
 		public String getAbortedMessage() {
 			return abortedMessage;
         }
-        
+
 		/**
 		 * @return the notifyOnAborted
 		 */
@@ -317,6 +317,6 @@ public class GlobalSlackNotifier extends RunListener<Run<?, ?>> implements Descr
 			return notifyOnAborted;
 		}
 
-        
+
       }
 }
