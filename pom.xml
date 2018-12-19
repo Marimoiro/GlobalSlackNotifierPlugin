@@ -14,7 +14,7 @@
 
   <properties>
     <!-- Baseline Jenkins version you use to build the plugin. Users must have this version or newer to run. -->
-    <jenkins.version>2.156</jenkins.version>
+    <jenkins.version>2.113</jenkins.version>
     <slack.version>2.10</slack.version>
     <java.level>8</java.level>
     <!-- Other properties you may want to use:
@@ -25,7 +25,7 @@
   </properties>
 
   <name>Global Slack Notifier Plugin</name>
-  <description>Global Slack Notifier Plugin</description>
+  <description>Post Slack Notification when any build finished.</description>
   <url>https://wiki.jenkins.io/display/JENKINS/Global+Slack+Notifier+Plugin</url>
 
   <!-- The default licence for Jenkins OSS Plugins is MIT. Substitute for the applicable one if needed. -->

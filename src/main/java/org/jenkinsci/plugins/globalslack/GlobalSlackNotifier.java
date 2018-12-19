@@ -99,7 +99,7 @@ public class GlobalSlackNotifier extends RunListener<Run<?, ?>> implements Descr
             true,true,true,true,true,
             true,false,false,
             choice,!StringUtils.isEmpty(postText),postText, null, null, null, null, null);
-          String messageText = getBuildStatusMessage(r,notifier,false,false,true);
+          String messageText = getBuildStatusMessage(r,notifier,false,false,!StringUtils.isEmpty(postText));
 
           SlackService service = new StandardSlackService(baseUrl, teamDomain, authToken, authTokenCredentialId, botUser, room);
           boolean postResult = service.publish(messageText, message.getColor());

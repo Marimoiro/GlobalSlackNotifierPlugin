@@ -19,6 +19,9 @@ public final class SlackMessage{
     }
 
     public String getMessage(){
+        if(message == null) {
+            return "";
+        }
         return message;
     }
 
